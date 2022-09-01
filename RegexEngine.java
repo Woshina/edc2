@@ -7,7 +7,7 @@ import javax.lang.model.util.ElementScanner14;
 import java.util.regex.Pattern;
 import java.util.ArrayList;
 
-class Main {
+class RegexEngine {
 
     public static String vaildInput() {
         boolean isVaild = false;
@@ -41,13 +41,59 @@ class Main {
         System.out.println("ready");
         return input;
     }
+// genrate a list store tranzation list
+public static ArrayList<String> expression(String regex) {
+    
+    ArrayList<String> express= new ArrayList<String>();
+    int len=regex.length()-1;
+    
+    for (int i = 0 ; i < regex.length()-1 ; i++) {
+        char c = regex.charAt(i);
+        if (Character.isLetter(c)||Character.isDigit(c)) {
+            String ad= ""+c;
+            if(i!=0&&regex.charAt(i-1)=='|'){
+                 ad= "|"+ad;
+                }
+            if (regex.charAt(i+1)=='*'||regex.charAt(i+1)=='+'||regex.charAt(i+1)=='|'){
+                    ad= ad+regex.charAt(i+1);
+            }
+             if(i<regex.length()-2){
+                    if (regex.charAt(i+2)=='|'){
+                        if (regex.charAt(i+1)=='*'||regex.charAt(i+1)=='+'){ad= ad+"|";}
+                         }
+                }
+                express.add(ad);
+                
+           
+        }
 
-  public static void RegexEngine(String[] args) {
+
+    }
+    char last=regex.charAt(len);
+    if (regex.charAt(len-1)=='|'){
+        express.add('|'+String.valueOf(last));}
+    else if (Character.isLetter(last)||Character.isDigit(last)){
+        express.add(String.valueOf(last));
+    }
+    int j=-1;
+    ArrayList<String> efinal= new ArrayList<String>();
+    for(int i=0;i < express.size();i++){
+        String element= express.get(i);
+        if (element.charAt(0)=='|'){
+            efinal.set(j,efinal.get(j)+element.substring(1));
+        }else{efinal.add(element);
+        j++;}
+    }
+    
+     return efinal;
+  }
+  public static void main(String[] args) {
     String regex=vaildInput();
     boolean con = true;
     Scanner in = new Scanner(System.in);
     String input = in.nextLine();
-    int Com=checkComplex(regex);
+    ArrayList<String> express=expression(regex);
+    System.out.println(express);
     
 
     }
