@@ -1,14 +1,84 @@
 import java.util.Scanner;  // Import the Scanner class 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import java.util.HashMap;
 import javax.lang.model.util.ElementScanner14;
-
-import java.util.regex.Pattern;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.List;
+import java.util.ArrayList;
+@SuppressWarnings("unchecked")
 
 class RegexEngine {
+    static Character e = '\u03b5'; 
+   
 
+
+      
+     
+    public static List<HashMap> Setedge(String regex) {
+        List<HashMap> adjList= new ArrayList<HashMap>();
+        HashMap<String, String> edge = new HashMap<String, String>();
+        edge.put("source", "0");
+        edge.put("condiciton", e.toString());
+        edge.put("destination", "1");
+        adjList.add(edge);
+        String prDis;
+        String source;
+        String condiciton;
+        String destination;
+        int number;
+        int sonum;
+        for (int i = 0 ; i < regex.length(); i++) {
+            char c = regex.charAt(i);
+            System.out.println(c);
+           
+            if (Character.isLetter(c)||Character.isDigit(c)) {
+                HashMap<String, String> trans= new HashMap<String, String>();
+                HashMap<String, String> nedge = new HashMap<String, String>();
+                trans=adjList.get(adjList.size() - 1);
+                prDis=trans.get("destination");
+                nedge.put("source", prDis);
+                condiciton=""+String.valueOf(c);
+                nedge.put("condiciton", condiciton);
+                 number = Integer.parseInt(prDis)+1;
+                destination=String.valueOf(number);
+                nedge.put("destination", destination);
+                adjList.add(nedge);
+
+            }if (c=='*') {
+                HashMap<String, String> trans= new HashMap<String, String>();
+                HashMap<String, String> nedge = new HashMap<String, String>();
+                HashMap<String, String> nedge1= new HashMap<String, String>();
+                HashMap<String, String> nedge2= new HashMap<String, String>();
+                trans=adjList.get(adjList.size() - 1);
+                prDis=trans.get("destination");
+                nedge.put("source", prDis);
+                nedge1.put("source", prDis);
+                nedge.put("condiciton", e.toString());
+                nedge2.put("condiciton", e.toString());
+                number = Integer.parseInt(prDis)+1;
+                destination=String.valueOf(number);
+                nedge.put("destination", destination);
+                nedge2.put("destination", destination);
+                number = Integer.parseInt(prDis)-1;
+                source=String.valueOf(number);
+                nedge1.put("destination", source);
+                nedge2.put("source", source);
+                condiciton=""+String.valueOf(regex.charAt(i-1));
+                nedge1.put("condiciton", condiciton);
+                adjList.add(nedge);
+                adjList.add(nedge1);
+                adjList.add(nedge2);
+                
+
+
+
+
+
+            }
+        }
+        return adjList;
+    }
     public static String vaildInput() {
         boolean isVaild = false;
         Scanner keyboard = new Scanner(System.in);
@@ -41,7 +111,7 @@ class RegexEngine {
         System.out.println("ready");
         return input;
     }
-// genrate a list store tranzation list
+// genrate a transition list from user input
 public static ArrayList<String> expression(String regex) {
     
     ArrayList<String> express= new ArrayList<String>();
@@ -89,6 +159,11 @@ public static ArrayList<String> expression(String regex) {
   }
   public static void main(String[] args) {
     String regex=vaildInput();
+    List<HashMap> adjList= new ArrayList<HashMap>();
+    adjList=Setedge(regex);
+    System.out.println(adjList);
+    
+
     boolean con = true;
     Scanner in = new Scanner(System.in);
     String input = in.nextLine();
