@@ -45,7 +45,7 @@ class RegexEngine {
                 nedge.put("destination", destination);
                 adjList.add(nedge);
 
-            }if (c=='*') {
+            }else if (c=='*') {
                 HashMap<String, String> trans= new HashMap<String, String>();
                 HashMap<String, String> nedge = new HashMap<String, String>();
                 HashMap<String, String> nedge1= new HashMap<String, String>();
@@ -75,6 +75,31 @@ class RegexEngine {
 
 
 
+            }else if(c=='+'){
+                HashMap<String, String> trans= new HashMap<String, String>();
+                HashMap<String, String> nedge = new HashMap<String, String>();
+                HashMap<String, String> nedge1= new HashMap<String, String>();
+                HashMap<String, String> nedge2= new HashMap<String, String>();
+                trans=adjList.get(adjList.size() - 1);
+                prDis=trans.get("destination");
+                nedge.put("source", prDis);
+                nedge1.put("source", prDis);
+                nedge.put("condiciton", e.toString());
+                nedge2.put("condiciton", e.toString());
+                number = Integer.parseInt(prDis)+1;
+                destination=String.valueOf(number);
+                nedge.put("destination", destination);
+                nedge2.put("destination", destination);
+                number = Integer.parseInt(prDis);
+                source=String.valueOf(number);
+                nedge1.put("destination", source);
+                nedge2.put("source", source);
+                condiciton=""+String.valueOf(regex.charAt(i-1));
+                nedge1.put("condiciton", condiciton);
+                adjList.add(nedge);
+                adjList.add(nedge1);
+                adjList.add(nedge2);
+                
             }
         }
         return adjList;
