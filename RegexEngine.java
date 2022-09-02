@@ -10,11 +10,62 @@ import java.util.ArrayList;
 
 class RegexEngine {
     static Character e = '\u03b5'; 
+    int stateconter=0;
    
 
 
       
-     
+    public static ArrayList<ArrayList<HashMap>> star(String regex, ArrayList<ArrayList<HashMap>> n){
+        HashMap<String, String> trans= new HashMap<String, String>();
+        HashMap<String, String> trans1= new HashMap<String, String>();
+        ArrayList<HashMap> State = new ArrayList<HashMap>();
+        int nextState=n.size()+1;
+        int prState=n.size()-1;
+        String PS=String.valueOf(prState);
+        String NS=String.valueOf(nextState);
+        String condiciton=""+String.valueOf(regex.charAt(0));
+                 
+        trans.put("condiciton",e.toString() );
+        trans.put("destination",NS );
+        State.add(trans);
+        n.add(State);
+        trans1.put("condiciton",condiciton );
+        trans1.put("destination",PS );
+        State.add(trans1);
+        n.add(State);
+
+        
+        return n;
+    }
+    public static ArrayList<ArrayList<HashMap>> basic(String regex, ArrayList<ArrayList<HashMap>> n){
+        HashMap<String, String> trans= new HashMap<String, String>();
+        ArrayList<HashMap> State = new ArrayList<HashMap>();
+        int nextState=n.size()+1;
+        String NS=String.valueOf(nextState);
+                 
+        trans.put("condiciton",regex );
+        trans.put("destination",NS );
+        State.add(trans);
+        n.add(State);
+        
+        return n;
+    }
+    public static ArrayList<ArrayList<HashMap>> Setenfa(ArrayList<String>  regexCon) {
+        ArrayList<ArrayList<HashMap>> enfa= new ArrayList<ArrayList<HashMap>>();
+        HashMap<String, String> trans= new HashMap<String, String>();
+        ArrayList<HashMap> State = new ArrayList<HashMap>();
+        trans.put("condiciton",e.toString());
+        trans.put("destination","1" );
+        State.add(trans);
+        enfa.add(State);
+        for (int i=0;i<regexCon.size();i++){
+            String condition=regexCon.get(i);
+            if (condition.length()==1){
+                enfa=basic(condition,enfa);
+            }
+        } return enfa;
+
+    }
     public static List<HashMap> Setedge(String regex) {
         List<HashMap> adjList= new ArrayList<HashMap>();
         HashMap<String, String> edge = new HashMap<String, String>();
@@ -54,7 +105,6 @@ class RegexEngine {
                 prDis=trans.get("destination");
                 nedge.put("source", prDis);
                 nedge1.put("source", prDis);
-                nedge.put("condiciton", e.toString());
                 nedge2.put("condiciton", e.toString());
                 number = Integer.parseInt(prDis)+1;
                 destination=String.valueOf(number);
@@ -83,19 +133,17 @@ class RegexEngine {
                 trans=adjList.get(adjList.size() - 1);
                 prDis=trans.get("destination");
                 nedge.put("source", prDis);
-                nedge1.put("source", prDis);
-                nedge.put("condiciton", e.toString());
+                nedge1.put("destination", prDis);
+                nedge2.put("source", prDis);
+                condiciton=""+String.valueOf(regex.charAt(i-1));
+                nedge.put("condiciton", condiciton);
+                nedge1.put("condiciton", condiciton);
                 nedge2.put("condiciton", e.toString());
                 number = Integer.parseInt(prDis)+1;
                 destination=String.valueOf(number);
                 nedge.put("destination", destination);
+                nedge1.put("source", destination);
                 nedge2.put("destination", destination);
-                number = Integer.parseInt(prDis);
-                source=String.valueOf(number);
-                nedge1.put("destination", source);
-                nedge2.put("source", source);
-                condiciton=""+String.valueOf(regex.charAt(i-1));
-                nedge1.put("condiciton", condiciton);
                 adjList.add(nedge);
                 adjList.add(nedge1);
                 adjList.add(nedge2);
@@ -165,11 +213,12 @@ public static ArrayList<String> expression(String regex) {
 
     }
     char last=regex.charAt(len);
+    if(len-1>0){
     if (regex.charAt(len-1)=='|'){
         express.add('|'+String.valueOf(last));}
     else if (Character.isLetter(last)||Character.isDigit(last)){
         express.add(String.valueOf(last));
-    }
+    }}else{ express.add(String.valueOf(last));}
     int j=-1;
     ArrayList<String> efinal= new ArrayList<String>();
     for(int i=0;i < express.size();i++){
@@ -186,13 +235,16 @@ public static ArrayList<String> expression(String regex) {
     String regex=vaildInput();
     List<HashMap> adjList= new ArrayList<HashMap>();
     adjList=Setedge(regex);
+    
     System.out.println(adjList);
     
 
-    boolean con = true;
-    Scanner in = new Scanner(System.in);
-    String input = in.nextLine();
+    // boolean con = true;
+    // Scanner in = new Scanner(System.in);
+    // String input = in.nextLine();
     ArrayList<String> express=expression(regex);
+    ArrayList<ArrayList<HashMap>> enfa=Setenfa(express);
+    System.out.println(enfa);
     System.out.println(express);
     
 
