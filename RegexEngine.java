@@ -1,6 +1,8 @@
 import java.util.Scanner;  // Import the Scanner class 
 import java.util.HashMap;
 import javax.lang.model.util.ElementScanner14;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
@@ -8,7 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 @SuppressWarnings("unchecked")
 
-class RegexEngine {
+class RNM{
     static Character e = '\u03b5'; 
     int stateconter=0;
    
@@ -63,49 +65,93 @@ class RegexEngine {
         ArrayList<HashMap> State = new ArrayList<HashMap>();
         int nextState=n.size()+1;
         String NS=String.valueOf(nextState);
-                 
+         
         trans.put("condiciton",regex );
         trans.put("destination",NS );
         State.add(trans);
         n.add(State);
-        trans.put("condiciton",e.toString() );
+        
         return n;
     }
-    public static ArrayList<ArrayList<HashMap>> Setenfa(ArrayList<String>  regexCon) {
+    public static ArrayList<ArrayList<HashMap>> alternation(int index,ArrayList<ArrayList<HashMap>> n){
+        HashMap<String, String> trans= new HashMap<String, String>();
+        HashMap<String, String> trans1= new HashMap<String, String>();
+        ArrayList<HashMap> State = new ArrayList<HashMap>();
+        int nextState=n.size()+1;
+        String NS1=String.valueOf(nextState);
+        String NS2=String.valueOf(nextState+1);
+        ArrayList<HashMap> prList=n.get(index); 
+        trans.put("condiciton",e.toString() );
+        trans.put("destination",NS2 );
+        trans1.put("condiciton",e.toString());
+        trans1.put("destination",NS1 );
+        State.add(trans1);
+        n.add(State);
+        prList.add(trans);
+        n.set(index,prList);
+
+        return n;
+    }
+   
+    public static ArrayList<ArrayList<HashMap>> Setenfa(String regex ) {
         ArrayList<ArrayList<HashMap>> enfa= new ArrayList<ArrayList<HashMap>>();
         HashMap<String, String> trans= new HashMap<String, String>();
         ArrayList<HashMap> State = new ArrayList<HashMap>();
+        List<Integer> toEnd = new ArrayList<Integer>();
         trans.put("condiciton",e.toString());
         trans.put("destination","1" );
         State.add(trans);
         enfa.add(State);
-        
-        for (int i=0;i<regexCon.size();i++){
-            String condition=new String();
-            condition=regexCon.get(i);
-            String con=new String();
-            System.out.println(condition);
-            
-            if (condition.length()==1){
-                //System.out.println(1);
-                enfa=basic(condition,enfa);
-            }else if(condition.charAt(1)=='*'&&condition.length()==2) {
-            
-                 con=""+String.valueOf(condition.charAt(0));
-                 
-                 enfa=basic(con,enfa);
-                 enfa=star(condition,enfa);}
-            else if(condition.charAt(1)=='+'&&condition.length()==2) {
-            
-                    con=""+String.valueOf(condition.charAt(0));
-                    
-                    enfa=basic(con,enfa);
-                    enfa=plus(condition,enfa);
-                    System.out.println(1);}
-                 //System.out.println(i);
-        } return enfa;
+        int index=0;
+        for (int i = 0 ; i < regex.length(); i++) {
 
+
+          char c = regex.charAt(i);
+          String condition= new String();
+          condition=""+String.valueOf(c);
+          if (Character.isLetter(c)||Character.isDigit(c)) {
+            condition=""+String.valueOf(c);
+            enfa=basic(condition,enfa);
+            
+
+          }else if (c=='*'){
+            condition=""+String.valueOf(regex.charAt(i-1));
+            enfa=star(condition,enfa);}
+
+          else if (c=='+'){
+            condition=""+String.valueOf(regex.charAt(i-1));
+            enfa=plus(condition,enfa);}
+            else if (c=='|'){
+
+               
+                enfa=alternation(index,enfa);
+                ArrayList<HashMap> SE = new ArrayList<HashMap>();
+                enfa.add(SE);
+                toEnd.add(enfa.size()-1);
+                
+        }
     }
+    ArrayList<HashMap> SE = new ArrayList<HashMap>();
+                enfa.add(SE);
+    toEnd.add(enfa.size()-1);
+    int nextState=enfa.size();
+    String NS=String.valueOf(nextState);
+    HashMap<String, String> path= new HashMap<String, String>();
+    path.put("condiciton",e.toString() );
+    path.put("destination",NS );
+for(int i=0;i<toEnd.size();i++){
+    int counter=toEnd.get(i);
+    ArrayList<HashMap> end=enfa.get(counter); 
+    
+    end.add(path);
+    enfa.set(counter,end);
+
+}     
+
+        
+ return enfa;
+
+}
     public static List<HashMap> Setedge(String regex) {
         List<HashMap> adjList= new ArrayList<HashMap>();
         HashMap<String, String> edge = new HashMap<String, String>();
@@ -121,8 +167,7 @@ class RegexEngine {
         int sonum;
         for (int i = 0 ; i < regex.length(); i++) {
             char c = regex.charAt(i);
-            System.out.println(c);
-           
+
             if (Character.isLetter(c)||Character.isDigit(c)) {
                 HashMap<String, String> trans= new HashMap<String, String>();
                 HashMap<String, String> nedge = new HashMap<String, String>();
@@ -276,15 +321,19 @@ public static ArrayList<String> expression(String regex) {
     List<HashMap> adjList= new ArrayList<HashMap>();
     adjList=Setedge(regex);
     
-    System.out.println(adjList);
+   
     
 
     // boolean con = true;
     // Scanner in = new Scanner(System.in);
     // String input = in.nextLine();
     ArrayList<String> express=expression(regex);
-    ArrayList<ArrayList<HashMap>> enfa=Setenfa(express);
-    System.out.println(enfa);
+    ArrayList<ArrayList<HashMap>> enfa=Setenfa(regex);
+    for(int i=0;i<enfa.size();i++){
+        ArrayList<HashMap> sb= enfa.get(i);
+        System.out.println(sb);
+    }
+    
     System.out.println(express);
     
 
