@@ -236,6 +236,38 @@ for(int i=0;i<toEnd.size();i++){
             }
         }
         return adjList;
+    }public static ArrayList<Integer> nextlist(ArrayList<ArrayList<HashMap>> enfa,ArrayList<Integer> prlist,String condito){
+        ArrayList<Integer> nxList=new ArrayList<Integer>();
+        for (int j=0;j<prlist.size();j++){
+            ArrayList<HashMap> state= enfa.get(prlist.get(j)) ;
+            for (int k=0;k<state.size();k++){
+                HashMap<String,String> condimap=new HashMap<String,String>();
+                condimap=state.get(k);
+                String conC=condimap.get("condiciton");
+                if(conC.equals(condito)){
+                    String dest=condimap.get("destination");
+                    int Dest=Integer.valueOf(dest);
+                    nxList.add(Dest);
+                    
+                }
+               
+             }
+             if (nxList.size()==0){             
+             for (int k=0;k<state.size();k++){
+               HashMap<String,String> condimap=new HashMap<String,String>();
+               condimap=state.get(k);
+               String conC=condimap.get("condiciton");
+               if(conC.equals(e.toString())){
+                   String dest=condimap.get("destination");
+                   int Dest=Integer.valueOf(dest);
+                   nxList.add(Dest);
+                  
+               }
+              
+            }
+           }
+        }
+        return nxList;
     }
     public static boolean check(String input, ArrayList<ArrayList<HashMap>> enfa ) {
         ArrayList<Integer> den=new ArrayList<Integer>();
@@ -245,40 +277,14 @@ for(int i=0;i<toEnd.size();i++){
         while(i<input.length()){
             char c = input.charAt(i);
             String iCondition=String.valueOf(c); ;
-            for (int m=0;m<de.size();m++){
-                den.add(0);
-            }
-            Collections.copy(den,de);
+            den = new ArrayList<Integer>(de);
             de.clear();
-            for (int j=0;j<den.size();j++){
-             ArrayList<HashMap> state= enfa.get(den.get(j)) ;
-             for (int k=0;k<state.size();k++){
-                 HashMap<String,String> condimap=new HashMap<String,String>();
-                 condimap=state.get(k);
-                 String conC=condimap.get("condiciton");
-                 if(conC.equals(iCondition)){
-                     String dest=condimap.get("destination");
-                     int Dest=Integer.valueOf(dest);
-                     de.add(Dest);
-                     i=i+1;
-                 }
-                
-              }if (de.size()==0)             
-              for (int k=0;k<state.size();k++){
-                HashMap<String,String> condimap=new HashMap<String,String>();
-                condimap=state.get(k);
-                String conC=condimap.get("condiciton");
-                if(conC.equals(e.toString())){
-                    String dest=condimap.get("destination");
-                    int Dest=Integer.valueOf(dest);
-                    de.add(Dest);
-                }
-                    
-               
-             }if (de.size()==0){return false;} 
-            }if (i==input.length()-1){
-
-            }
+            de=nextlist(enfa, den, iCondition);
+            if(de.size()==1){
+                i++;
+            }else if(de.size()==0){return false;}
+            System.out.print(i);
+            System.out.print(de);
         
         }
     
