@@ -273,10 +273,12 @@ for(int i=0;i<toEnd.size();i++){
                     int Dest=Integer.valueOf(dest);
                     de.add(Dest);
                 }
+                    
                
-             }
-            }System.out.print(i);
-           System.out.print(de);
+             }if (de.size()==0){return false;} 
+            }if (i==input.length()-1){
+
+            }
         
         }
     
