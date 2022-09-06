@@ -1,7 +1,7 @@
 import java.util.Scanner;  // Import the Scanner class 
 import java.util.HashMap;
 import javax.lang.model.util.ElementScanner14;
-
+import java.util.Collections;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -237,6 +237,51 @@ for(int i=0;i<toEnd.size();i++){
         }
         return adjList;
     }
+    public static boolean check(String input, ArrayList<ArrayList<HashMap>> enfa ) {
+        ArrayList<Integer> den=new ArrayList<Integer>();
+        ArrayList<Integer> de=new ArrayList<Integer>();
+        de.add(0);
+        int i=0;
+        while(i<input.length()){
+            char c = input.charAt(i);
+            String iCondition=String.valueOf(c); ;
+            for (int m=0;m<de.size();m++){
+                den.add(0);
+            }
+            Collections.copy(den,de);
+            de.clear();
+            for (int j=0;j<den.size();j++){
+             ArrayList<HashMap> state= enfa.get(den.get(j)) ;
+             for (int k=0;k<state.size();k++){
+                 HashMap<String,String> condimap=new HashMap<String,String>();
+                 condimap=state.get(k);
+                 String conC=condimap.get("condiciton");
+                 if(conC.equals(iCondition)){
+                     String dest=condimap.get("destination");
+                     int Dest=Integer.valueOf(dest);
+                     de.add(Dest);
+                     i=i+1;
+                 }
+                
+              }if (de.size()==0)             
+              for (int k=0;k<state.size();k++){
+                HashMap<String,String> condimap=new HashMap<String,String>();
+                condimap=state.get(k);
+                String conC=condimap.get("condiciton");
+                if(conC.equals(e.toString())){
+                    String dest=condimap.get("destination");
+                    int Dest=Integer.valueOf(dest);
+                    de.add(Dest);
+                }
+               
+             }
+            }System.out.print(i);
+           System.out.print(de);
+        
+        }
+    
+        return true;
+    }
     public static String vaildInput() {
         boolean isVaild = false;
         Scanner keyboard = new Scanner(System.in);
@@ -316,6 +361,7 @@ public static ArrayList<String> expression(String regex) {
     
      return efinal;
   }
+  
   public static void main(String[] args) {
     String regex=vaildInput();
     List<HashMap> adjList= new ArrayList<HashMap>();
@@ -335,7 +381,9 @@ public static ArrayList<String> expression(String regex) {
     }
     
     System.out.println(express);
-    
+    Scanner keyboard = new Scanner(System.in);
+    String input = keyboard.nextLine();
+    System.out.println(check(input, enfa));
 
     }
 }
