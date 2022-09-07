@@ -304,7 +304,7 @@ for(int i=0;i<toEnd.size();i++){
                         if(ckt+1==enfa.size()){return true;}
                     }
                     ckfinal=Enextlist(enfa,ckfinal);
-                    System.out.print("asdasd");
+                    
 
                 }
 
@@ -338,8 +338,7 @@ for(int i=0;i<toEnd.size();i++){
 
             // }
             if(de.size()==0){return false;}
-            System.out.print(i);
-            System.out.print(de);
+
 
         
         }
@@ -428,26 +427,24 @@ public static ArrayList<String> expression(String regex) {
   
   public static void main(String[] args) {
     String regex=vaildInput();
-    List<HashMap> adjList= new ArrayList<HashMap>();
-    adjList=Setedge(regex);
-    
+   
    
     
 
-    // boolean con = true;
+   boolean con = true;
     // Scanner in = new Scanner(System.in);
     // String input = in.nextLine();
     ArrayList<String> express=expression(regex);
     ArrayList<ArrayList<HashMap>> enfa=Setenfa(regex);
-    for(int i=0;i<enfa.size();i++){
-        ArrayList<HashMap> sb= enfa.get(i);
-        System.out.println(sb);
-    }
+ 
     
-    System.out.println(express);
+    while (con){
+   
     Scanner keyboard = new Scanner(System.in);
     String input = keyboard.nextLine();
-    System.out.println(check(input, enfa));
+    System.out.print(input+"\n");
+    
+    System.out.println(check(input, enfa));}
 
     }
 }
