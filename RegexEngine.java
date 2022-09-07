@@ -156,6 +156,123 @@ for(int i=0;i<toEnd.size();i++){
  return enfa;
 
 }
+    public static List<HashMap> Setedge(String regex) {
+        List<HashMap> adjList= new ArrayList<HashMap>();
+        HashMap<String, String> edge = new HashMap<String, String>();
+        edge.put("source", "0");
+        edge.put("condiciton", e.toString());
+        edge.put("destination", "1");
+        adjList.add(edge);
+        String prDis;
+        String source;
+        String condiciton;
+        String destination;
+        int number;
+        int sonum;
+        for (int i = 0 ; i < regex.length(); i++) {
+            char c = regex.charAt(i);
+
+            if (Character.isLetter(c)||Character.isDigit(c)) {
+                HashMap<String, String> trans= new HashMap<String, String>();
+                HashMap<String, String> nedge = new HashMap<String, String>();
+                trans=adjList.get(adjList.size() - 1);
+                prDis=trans.get("destination");
+                nedge.put("source", prDis);
+                condiciton=""+String.valueOf(c);
+                nedge.put("condiciton", condiciton);
+                 number = Integer.parseInt(prDis)+1;
+                destination=String.valueOf(number);
+                nedge.put("destination", destination);
+                adjList.add(nedge);
+
+            }else if (c=='*') {
+                HashMap<String, String> trans= new HashMap<String, String>();
+                HashMap<String, String> nedge = new HashMap<String, String>();
+                HashMap<String, String> nedge1= new HashMap<String, String>();
+                HashMap<String, String> nedge2= new HashMap<String, String>();
+                trans=adjList.get(adjList.size() - 1);
+                prDis=trans.get("destination");
+                nedge.put("source", prDis);
+                nedge1.put("source", prDis);
+                nedge2.put("condiciton", e.toString());
+                number = Integer.parseInt(prDis)+1;
+                destination=String.valueOf(number);
+                nedge.put("destination", destination);
+                nedge2.put("destination", destination);
+                number = Integer.parseInt(prDis)-1;
+                source=String.valueOf(number);
+                nedge1.put("destination", source);
+                nedge2.put("source", source);
+                condiciton=""+String.valueOf(regex.charAt(i-1));
+                nedge1.put("condiciton", condiciton);
+                adjList.add(nedge);
+                adjList.add(nedge1);
+                adjList.add(nedge2);
+                
+
+
+
+
+
+            }else if(c=='+'){
+                HashMap<String, String> trans= new HashMap<String, String>();
+                HashMap<String, String> nedge = new HashMap<String, String>();
+                HashMap<String, String> nedge1= new HashMap<String, String>();
+                HashMap<String, String> nedge2= new HashMap<String, String>();
+                trans=adjList.get(adjList.size() - 1);
+                prDis=trans.get("destination");
+                nedge.put("source", prDis);
+                nedge1.put("destination", prDis);
+                nedge2.put("source", prDis);
+                condiciton=""+String.valueOf(regex.charAt(i-1));
+                nedge.put("condiciton", condiciton);
+                nedge1.put("condiciton", condiciton);
+                nedge2.put("condiciton", e.toString());
+                number = Integer.parseInt(prDis)+1;
+                destination=String.valueOf(number);
+                nedge.put("destination", destination);
+                nedge1.put("source", destination);
+                nedge2.put("destination", destination);
+                adjList.add(nedge);
+                adjList.add(nedge1);
+                adjList.add(nedge2);
+                
+            }
+        }
+        return adjList;
+    }public static ArrayList<Integer> nextlist(ArrayList<ArrayList<HashMap>> enfa,ArrayList<Integer> den,String Condion){
+        ArrayList<Integer> nxList= new  ArrayList<Integer>();
+        for (int j=0;j<den.size();j++){
+            ArrayList<HashMap> state= enfa.get(den.get(j)) ; 
+            for (int k=0;k<state.size();k++){
+               
+                HashMap<String,String> condi= state.get(k);
+                if(condi.get("condiciton").equals(Condion)){
+                    String nextS=condi.get("destination");
+                    int NS=Integer.valueOf(nextS);
+                    nxList.add(NS);
+                   }
+
+             }}
+        return nxList;
+    }
+    public static ArrayList<Integer> Enextlist(ArrayList<ArrayList<HashMap>> enfa,ArrayList<Integer> den){
+        ArrayList<Integer> nxList= new  ArrayList<Integer>();
+        for (int j=0;j<den.size();j++){
+            ArrayList<HashMap> state= enfa.get(den.get(j)) ; 
+            for (int k=0;k<state.size();k++){
+               
+                HashMap<String,String> condi= state.get(k);
+                if(condi.get("condiciton").equals(e.toString())){
+                    String nextS=condi.get("destination");
+                    int NS=Integer.valueOf(nextS);
+                    nxList.add(NS);
+                   }
+
+             }}
+        return nxList;
+    }
+    
     
     public static boolean check(String input, ArrayList<ArrayList<HashMap>> enfa ) {
         ArrayList<Integer> den=new ArrayList<Integer>();
