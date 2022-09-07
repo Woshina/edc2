@@ -12,7 +12,73 @@ import java.util.ArrayList;
 
 class RegexEngine{
     static Character e = '\u03b5'; 
- 
+    int stateconter=0;
+   
+
+
+      
+   
+        public static ArrayList<ArrayList<HashMap>> basic(String regex, ArrayList<ArrayList<HashMap>> n){
+        HashMap<String, String> trans= new HashMap<String, String>();
+        ArrayList<HashMap> State = new ArrayList<HashMap>();
+        int nextState=n.size()+1;
+        String NS=String.valueOf(nextState);
+         
+        trans.put("condiciton",regex );
+        trans.put("destination",NS );
+        State.add(trans);
+        n.add(State);
+        
+        return n;
+    }
+    
+   
+    public static ArrayList<ArrayList<HashMap>> Setenfa(String regex ) {
+        ArrayList<ArrayList<HashMap>> enfa= new ArrayList<ArrayList<HashMap>>();
+        HashMap<String, String> trans= new HashMap<String, String>();
+        ArrayList<HashMap> State = new ArrayList<HashMap>();
+        List<Integer> toEnd = new ArrayList<Integer>();
+        trans.put("condiciton",e.toString());
+        trans.put("destination","1" );
+        State.add(trans);
+        enfa.add(State);
+        int index=0;
+        for (int i = 0 ; i < regex.length(); i++) {
+
+
+          char c = regex.charAt(i);
+          String condition= new String();
+          condition=""+String.valueOf(c);
+          if (Character.isLetter(c)||Character.isDigit(c)) {
+            condition=""+String.valueOf(c);
+            enfa=basic(condition,enfa);
+            
+
+          }
+        
+    }
+    ArrayList<HashMap> SE = new ArrayList<HashMap>();
+                enfa.add(SE);
+    toEnd.add(enfa.size()-1);
+    int nextState=enfa.size();
+    String NS=String.valueOf(nextState);
+    HashMap<String, String> path= new HashMap<String, String>();
+    path.put("condiciton",e.toString() );
+    path.put("destination",NS );
+for(int i=0;i<toEnd.size();i++){
+    int counter=toEnd.get(i);
+    ArrayList<HashMap> end=enfa.get(counter); 
+    
+    end.add(path);
+    enfa.set(counter,end);
+
+}     
+
+        
+ return enfa;
+
+}
+    
     public static String vaildInput() {
         boolean isVaild = false;
         Scanner keyboard = new Scanner(System.in);
@@ -98,6 +164,23 @@ public static ArrayList<String> expression(String regex) {
     List<HashMap> adjList= new ArrayList<HashMap>();
     adjList=Setedge(regex);
     
+   
+    
+
+    // boolean con = true;
+    // Scanner in = new Scanner(System.in);
+    // String input = in.nextLine();
+    ArrayList<String> express=expression(regex);
+    ArrayList<ArrayList<HashMap>> enfa=Setenfa(regex);
+    for(int i=0;i<enfa.size();i++){
+        ArrayList<HashMap> sb= enfa.get(i);
+        System.out.println(sb);
+    }
+    
+    System.out.println(express);
+    Scanner keyboard = new Scanner(System.in);
+    String input = keyboard.nextLine();
+    System.out.println(check(input, enfa));
 
     }
 }
