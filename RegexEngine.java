@@ -173,53 +173,35 @@ for(int i=0;i<toEnd.size();i++){
             }else if(de.size()==0){
                 de=Enextlist(enfa, den);
             }
-            
-            if(i<input.length()){
-                ArrayList<Integer> cktofinal=Enextlist(enfa,de);
-                if (cktofinal.size()==1){ int cktof=cktofinal.get(0);
-                    if(cktof==enfa.size()){return false;}
 
-            }else if(i==input.length()-1){
-                ArrayList<Integer> ckfinal=Enextlist(enfa,de);
-                while(ckfinal.size()!=0){
-                    for (int x=0;x<ckfinal.size();x++){
-                        int ckt=ckfinal.get(x);
-                        if(ckt+1==enfa.size()){return true;}
-                    }
-                    ckfinal=Enextlist(enfa,ckfinal);
-                    System.out.print("asdasd");
-
-                }
-
-            }}
-            // if (de.size()==1){
-            //     int ck=de.get(0);
+            if (de.size()==1){
+                int ck=de.get(0);
                 
-            //     if(ck+1==enfa.size()){
-            //         if(i==input.length()){return true;}else{return false;}}
+                if(ck+1==enfa.size()){
+                    if(i==input.length()){return true;}else{return false;}}
 
                     
-            //     ArrayList<Integer> cktofinal=Enextlist(enfa,de);
-            //     if (cktofinal.size()==1){
-            //         int cktof=cktofinal.get(0);
-            //         if(cktof==enfa.size()){ if(i==input.length()){return true;}else{return false;}}
-            //     }
-            // }
+                ArrayList<Integer> cktofinal=Enextlist(enfa,de);
+                if (cktofinal.size()==1){
+                    int cktof=cktofinal.get(0);
+                    if(cktof==enfa.size()){ if(i==input.length()){return true;}else{return false;}}
+                }
+            }
             
-            // if(i==input.length()){
-            //  while(Enextlist(enfa, de).size()!=0){
-            //  de=Enextlist(enfa, de);
-            //  if(Enextlist(enfa, de).size()==0){return false;}}
-            //  ArrayList<HashMap> Fstate= enfa.get(de.get(0));
-            //  HashMap<String,String> Fcon=Fstate.get(0);
-            //  String Fincon=Fcon.get("condiciton");
-            //  String Finstate=Fcon.get("destination");
-            //  int Finde=Integer.valueOf(Finstate);
-            //  if(Fincon.equals(e.toString())&&Finde==enfa.size()){
-            //      return true;
-            //  }
+            if(i==input.length()){
+             while(Enextlist(enfa, de).size()!=0){
+             de=Enextlist(enfa, de);
+             if(Enextlist(enfa, de).size()==0){return false;}}
+             ArrayList<HashMap> Fstate= enfa.get(de.get(0));
+             HashMap<String,String> Fcon=Fstate.get(0);
+             String Fincon=Fcon.get("condiciton");
+             String Finstate=Fcon.get("destination");
+             int Finde=Integer.valueOf(Finstate);
+             if(Fincon.equals(e.toString())&&Finde==enfa.size()){
+                 return true;
+             }
 
-            // }
+            }
             if(de.size()==0){return false;}
             System.out.print(i);
             System.out.print(de);
