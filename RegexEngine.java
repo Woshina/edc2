@@ -17,7 +17,31 @@ class RegexEngine{
 
 
       
-   
+    public static ArrayList<ArrayList<HashMap>> star(String regex, ArrayList<ArrayList<HashMap>> n){
+        HashMap<String, String> trans= new HashMap<String, String>();
+        HashMap<String, String> trans1= new HashMap<String, String>();
+        ArrayList<HashMap> State = new ArrayList<HashMap>();
+        
+        int nextState=n.size()+1;
+        int prState=n.size()-1;
+        String PS=String.valueOf(prState);
+        String NS=String.valueOf(nextState);
+        String condiciton=""+String.valueOf(regex.charAt(0));
+        ArrayList<HashMap> prList=n.get(prState);        
+        trans.put("condiciton",e.toString() );
+        trans.put("destination",NS );
+        State.add(trans);
+        trans1.put("condiciton",condiciton );
+        trans1.put("destination",PS );
+        State.add(trans1);
+        n.add(State);
+        prList.add(trans);
+        n.set(prState,prList);
+
+        
+        return n;
+    }
+    
         public static ArrayList<ArrayList<HashMap>> basic(String regex, ArrayList<ArrayList<HashMap>> n){
         HashMap<String, String> trans= new HashMap<String, String>();
         ArrayList<HashMap> State = new ArrayList<HashMap>();
@@ -31,7 +55,7 @@ class RegexEngine{
         
         return n;
     }
-    
+
    
     public static ArrayList<ArrayList<HashMap>> Setenfa(String regex ) {
         ArrayList<ArrayList<HashMap>> enfa= new ArrayList<ArrayList<HashMap>>();
@@ -55,7 +79,6 @@ class RegexEngine{
             
 
           }
-        
     }
     ArrayList<HashMap> SE = new ArrayList<HashMap>();
                 enfa.add(SE);
@@ -78,7 +101,11 @@ for(int i=0;i<toEnd.size();i++){
  return enfa;
 
 }
+
+
+   
     
+
     public static String vaildInput() {
         boolean isVaild = false;
         Scanner keyboard = new Scanner(System.in);
@@ -180,7 +207,7 @@ public static ArrayList<String> expression(String regex) {
     System.out.println(express);
     Scanner keyboard = new Scanner(System.in);
     String input = keyboard.nextLine();
-    System.out.println(check(input, enfa));
+
 
     }
 }
