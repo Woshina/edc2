@@ -41,7 +41,30 @@ class RegexEngine{
         
         return n;
     }
-    
+    public static ArrayList<ArrayList<HashMap>> plus(String regex, ArrayList<ArrayList<HashMap>> n){
+        HashMap<String, String> trans= new HashMap<String, String>();
+        HashMap<String, String> trans1= new HashMap<String, String>();
+        HashMap<String, String> trans2= new HashMap<String, String>();
+        ArrayList<HashMap> State = new ArrayList<HashMap>();
+        ArrayList<HashMap> State1 = new ArrayList<HashMap>();
+        int nextState=n.size()+1;
+        String NS=String.valueOf(nextState);
+        String CS=String.valueOf(nextState-1);
+        String NSS=String.valueOf(nextState+1);
+        String condiciton=""+String.valueOf(regex.charAt(0));        
+        trans.put("condiciton",e.toString() );
+        trans.put("destination",NS );
+        State.add(trans);
+        n.add(State);
+        trans1.put("condiciton",condiciton );
+        trans1.put("destination",CS);
+        trans2.put("condiciton",e.toString( ));
+        trans2.put("destination",NSS);
+        State1.add(trans1);
+        State1.add(trans2);
+        n.add(State1);
+        return n;
+    }
         public static ArrayList<ArrayList<HashMap>> basic(String regex, ArrayList<ArrayList<HashMap>> n){
         HashMap<String, String> trans= new HashMap<String, String>();
         ArrayList<HashMap> State = new ArrayList<HashMap>();
@@ -55,7 +78,24 @@ class RegexEngine{
         
         return n;
     }
+    public static ArrayList<ArrayList<HashMap>> alternation(int index,ArrayList<ArrayList<HashMap>> n){
+        HashMap<String, String> trans= new HashMap<String, String>();
+        HashMap<String, String> trans1= new HashMap<String, String>();
+        ArrayList<HashMap> State = new ArrayList<HashMap>();
+        int nextState=n.size()+1;
+        String NS1=String.valueOf(nextState);
+        String NS2=String.valueOf(nextState);
+        ArrayList<HashMap> prList=n.get(index); 
+        trans.put("condiciton",e.toString() );
+        trans.put("destination",NS2 );
 
+        
+        
+        prList.add(trans);
+        n.set(index,prList);
+
+        return n;
+    }
    
     public static ArrayList<ArrayList<HashMap>> Setenfa(String regex ) {
         ArrayList<ArrayList<HashMap>> enfa= new ArrayList<ArrayList<HashMap>>();
@@ -78,7 +118,22 @@ class RegexEngine{
             enfa=basic(condition,enfa);
             
 
-          }
+          }else if (c=='*'){
+            condition=""+String.valueOf(regex.charAt(i-1));
+            enfa=star(condition,enfa);}
+
+          else if (c=='+'){
+            condition=""+String.valueOf(regex.charAt(i-1));
+            enfa=plus(condition,enfa);}
+            else if (c=='|'){
+
+               
+                enfa=alternation(index,enfa);
+                ArrayList<HashMap> SE = new ArrayList<HashMap>();
+                enfa.add(SE);
+                toEnd.add(enfa.size()-1);
+                
+        }
     }
     ArrayList<HashMap> SE = new ArrayList<HashMap>();
                 enfa.add(SE);
@@ -101,10 +156,6 @@ for(int i=0;i<toEnd.size();i++){
  return enfa;
 
 }
-
-
-   
-    
 
     public static String vaildInput() {
         boolean isVaild = false;
@@ -207,7 +258,7 @@ public static ArrayList<String> expression(String regex) {
     System.out.println(express);
     Scanner keyboard = new Scanner(System.in);
     String input = keyboard.nextLine();
-
+   
 
     }
 }
