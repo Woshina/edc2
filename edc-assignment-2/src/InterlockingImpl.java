@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InterlockingImpl implements Interlocking{
-    ArrayList<Integer>PetriTokens= new ArrayList<Integer>();
+
 
 
     public void addTrain(String trainName, int entryTrackSection, int destinationTrackSection){
@@ -77,24 +77,10 @@ public class InterlockingImpl implements Interlocking{
             // code block
             default: throw new IllegalArgumentException("invaild entry Section");
         }
+        UpdateToken(entryTrackSection);
     }
     // Update the token at each section a
-    public void UpdateToken() {
-        for (int i = 0; i < Trainlist.size(); i++) {
-            ArrayList<String> tranl = new ArrayList<String>();
-            tranl = Trainlist.get(i);
-            String currentsection = tranl.get(3);
-            int Currentsection = Integer.parseInt(currentsection)-1;
-            tokenList.set(Currentsection,1);
 
-
-        }
-
-
-
-
-
-    }
 
     public int moveTrains(String[] trainNames){
         //move the train that reached out the corridor destination
@@ -120,46 +106,53 @@ public class InterlockingImpl implements Interlocking{
     }
     public String getSection(int trackSection){
         String Trainname="NoneTrainonThatSection";
-        if(trackSection<1||trackSection>11){ throw new IllegalArgumentException("train name repeat");}
+        if(trackSection<1||trackSection>11){ throw new IllegalArgumentException("train section invalid");}
         else {
-        for (int i = 0; i < Trainlist.size(); i++) {
-            ArrayList<String> trancheck= new ArrayList<String>();
-            trancheck = Trainlist.get(i) ;
-            String checkcurrentsection=trancheck.get(3);
-            String name=trancheck.get(0);
+            for (int i = 0; i < Trainlist.size(); i++) {
+                ArrayList<String> trancheck= new ArrayList<String>();
+                trancheck = Trainlist.get(i) ;
+                String checkcurrentsection=trancheck.get(3);
+                String name=trancheck.get(0);
 
-            int currentsection=Integer.valueOf(checkcurrentsection);
-            if (currentsection==trackSection){
-                Trainname=name;
-            }
-        }}
+                int currentsection=Integer.valueOf(checkcurrentsection);
+                if (currentsection==trackSection){
+                    Trainname=name;
+                }
+            }}
         return Trainname;
     }
     public int getTrain(String trainName){
         return 1;
     }
+    public void UpdateToken(int tokenlocation) {
+
+        if(tokenList.get(tokenlocation-1)==1){
+            throw new IllegalArgumentException("add train would cause crash");
+        }else{tokenList.set(tokenlocation-1,1);}
+
+
+    }
     public void initializeToken() {
         for (int i = 0; i < 11; i++) {
             tokenList.add(0);
-
         }
+    }
 
-    }
-    public static String[] StringName(ArrayList<ArrayList>Trainlist){
-        String[] a={"a","b"};
-        return a;
-    }
     public static void main(String[] args) {
         HashMap TrainInf = new HashMap();
-        InterlockingImpl Impl=new InterlockingImpl();
-        Impl.initializeToken();
-        Impl.addTrain("t1",1,8);
-        Impl.addTrain("t2",11,3);
-        Impl.UpdateToken();
-       String name= Impl.getSection(11);
+        Interlocking il = new InterlockingImpl();
+        il.initializeToken();
+        System.out.println(tokenList);
+        il.addTrain("t1",1,8);
+        il.addTrain("t2",9,2);
+        il.addTrain("t3",3,4);
+
+
+
         System.out.println(Trainlist);
         System.out.println(tokenList);
-        System.out.println(name);
+
+
 
 
     }
